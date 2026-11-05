@@ -33,7 +33,13 @@ class FirstFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btEnviar.setOnClickListener {
+            val nome = binding.etNome.text.toString()
 
+            if(nome.isBlank()){
+                binding.etNome.error = "Digite um nome"
+            } else {
+                binding.tvResultado.text = nome
+            }
         }
     }
 
