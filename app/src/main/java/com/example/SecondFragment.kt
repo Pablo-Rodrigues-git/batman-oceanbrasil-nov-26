@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.databinding.FragmentSecondBinding
 
@@ -32,13 +33,43 @@ class SecondFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
-        }
-    }
+        val nomeDigitado = arguments?.getString("NOME_DIGITADO")
+        binding.textviewSecond.text = nomeDigitado ?: "Nenhum nome digitado"
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+
+        binding.buttonSecond.setOnClickListener {
+            findNavController().navigate(R.id.action_SecondFragment_to_ThirdFragment)
+        }
+
+        binding.buttonThird.setOnClickListener {
+            val nome = binding.etTerceiroNome.text.toString()
+
+            if (nome.isBlank()) {
+                binding.etTerceiroNome.error = "Digite um nome"
+            } else {
+                binding.textviewSecond.text = nome
+            }
+        }
+
+
+        binding.buttonThird.setOnClickListener {
+            val nome = binding.etTerceiroNome.text.toString()
+            if (nome.isBlank()) {
+                Toast.makeText(
+                    requireContext(),
+                    "Digite um nome",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                val bundle = Bundle().apply {
+                    putString("NOVO_NOME_DIGITADO", nome)
+                }
+                findNavController().navigate(
+                    R.id.action_SecondFragment_to_ThirdFragment,
+                    bundle
+                )
+            }
+        }
+
     }
 }

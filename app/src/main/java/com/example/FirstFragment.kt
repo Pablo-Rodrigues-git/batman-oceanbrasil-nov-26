@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.databinding.FragmentFirstBinding
 
@@ -35,16 +36,30 @@ class FirstFragment : Fragment() {
         binding.btEnviar.setOnClickListener {
             val nome = binding.etNome.text.toString()
 
-            if(nome.isBlank()){
+            if (nome.isBlank()) {
                 binding.etNome.error = "Digite um nome"
             } else {
                 binding.tvResultado.text = nome
             }
         }
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        binding.btAbrirNovaTela.setOnClickListener {
+            val nome = binding.etNome.text.toString()
+            if (nome.isBlank()) {
+                Toast.makeText(
+                    requireContext(),
+                    "Digite um nome",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                val bundle = Bundle().apply {
+                    putString("NOME_DIGITADO", nome)
+                }
+                findNavController().navigate(
+                    R.id.action_FirstFragment_to_SecondFragment,
+                    bundle
+                )
+            }
+        }
     }
 }
